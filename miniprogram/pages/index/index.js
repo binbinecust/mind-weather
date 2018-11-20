@@ -12,15 +12,18 @@ Page({
     bcgColor: '',
     bcgIndex: 0,
     city: '',
-    userImg: '',
     cityDatas: '',
+    located: '',
     weatherIconUrl: weatherIconUrl,
-    bcgImgList: bcgImgList
+    bcgImgList: bcgImgList,
+    bcgImgAreaShow: false,
+    activeIndex: 0
   },
   onLoad: function(options) {
     //Do some initialize when page load.
     this.reloadPage();
   },
+  initWeather(location) {},
   setBcgImg(index = 0) {
     let color = bcgImgList[index].topColor;
     this.setData({
@@ -36,6 +39,14 @@ Page({
     wx.setNavigationBarColor({
       frontColor: '#ffffff',
       backgroundColor: globalData.theme
+    });
+  },
+  getCityDatas() {
+    let cityDatas = wx.getStorage({
+      key: 'cityDatas',
+      success: res => {
+        this.setData();
+      }
     });
   },
   reloadPage() {
@@ -63,6 +74,88 @@ Page({
   menuHide() {},
   getCityDatas() {},
   reloadInitSetting() {},
-  reloadWeather() {},
-  reloadGetBroadcast() {}
+  reloadWeather() {
+    wx.getLocation({
+      type: 'wgs84',
+      success: res => {
+        this.getWeather(`${res.latitude},${res.longitude}`);
+        this.getHourly(`${res.latitude},${res.longitude}`);
+      },
+      fail: err => {
+        if (err.errMsg.indexOf('deny') !== -1 || err.errMsg.indexOf('denied') !== -1) {
+          wx.showToast({
+            title: '需要开启地址位置权限',
+            icon: 'none',
+            duration: 2500,
+            success: res => {
+              if (wx.canIUse('openSetting')) {
+                wx.openSetting({
+                  success: res => {
+                    debugger;
+                  }
+                });
+              }
+            }
+          });
+        } else {
+          wx.showToast({
+            title: '网络不给力，请稍后再试',
+            icon: 'none'
+          });
+        }
+      }
+    });
+    if (this.data.located) {
+      this.initWeather();
+    }
+  },
+  getWeather(location) {
+    wx.request({
+      url: `${globalData.requestUrl.weather}`,
+      data: {
+        location,
+        key
+      },
+      success: res => {
+        if (res.statusCode === 200) {
+          let data = res.data.HeWeather6[0];
+          if (data.status === 'ok') {
+            this.setData({
+              city: ''
+            });
+            let now = new Date();
+            debugger;
+            data.updateTime = wx.moment().format('MM-DD HH:mm');
+          }
+        } else {
+          wx.showToast({
+            title: '查询失败',
+            icon: 'none'
+          });
+        }
+        console.log(res);
+      },
+      fail: err => {}
+    });
+  },
+  getHourly() {},
+  reloadGetBroadcast() {},
+  fnShowImgArea() {
+    this.setData({
+      bcgImgAreaShow: true
+    });
+  },
+  fnChooseBgImg(e) {
+    let { img, index } = e.currentTarget.dataset;
+    this.setData({
+      activeIndex: index,
+      bcgImg: img.src
+    });
+    globalData.theme = img.topColor;
+  },
+  fnHideImgArea() {
+    this.setData({
+      bcgImgAreaShow: false
+    });
+  }
 });

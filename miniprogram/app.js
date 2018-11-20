@@ -1,4 +1,6 @@
 //app.js
+import moment from 'moment';
+
 App({
   onLaunch: function() {
     let _this = this;
@@ -21,6 +23,8 @@ App({
         _this.globalData.userInfo = res;
       }
     });
+    moment.locale('zh-cn');
+    wx.moment = moment;
   },
   globalData: {
     isIPhoneX: false,

@@ -4,26 +4,25 @@
   <view class="bcg" style="background: {{bcgColor}} url({{bcgImg}}); background-size:cover">
     <!-- <image src="{{bcgImg}}" class="bcg" /> -->
   </view>
-  <view class="search">
+  <view class="search" wx:if="{{!bcgImgAreaShow}}">
     <view class="search-wrapper">
       <image src="../../img/search.png" />
       <input value="{{city}}" class="search-input" placeholder="请输入城市，快速查询天气" placeholder-style="color: #fff" />
     </view>
   </view>
-  <view class="chooseBcg">
+  <view class="chooseBcg" wx:if="{{bcgImgAreaShow}}">
     <view class="title">更换背景</view>
     <view class="imgs">
-      <view class="" wx:for="{{bcgImgList}}" wx:key="{{index}}">
-        <image src="{{item.src}}" />
+      <view class="img-item {{index === activeIndex ? 'active' : ''}}" wx:for="{{bcgImgList}}" wx:key="{{index}}" data-index="{{index}}" data-img="{{item}}" bindtap="fnChooseBgImg">
+        <image src="{{item.src}}" mode="widthFix" />
       </view>
-      <image src="" />
     </view>
-    <view class="down-arrow">
+    <view class="down-arrow" bindtap="fnHideImgArea">
       <image src="../../img/up-arrow.png" />
     </view>
   </view>
-  <view class="content">
-    <view class="avatarInfo">
+  <view class="content" wx:if="{{!bcgImgAreaShow}}">
+    <view class="avatarInfo" bindtap="fnShowImgArea">
       <open-data type="userAvatarUrl" class="avatar"></open-data>
       <open-data type="userNickName" class="name"></open-data>
       <image class='downArrow' src='../../img/down.png'></image>
@@ -132,7 +131,7 @@
     </view>
     <view class='livingIndex' wx:if='{{!setting.hiddenIndex}}'>
       <view class='item' wx:for='{{cityDatas.lifestyle || [1,2,4,5,6]}}' wx:key='{{index}}'>
-        <image class='icon' src='/img/lifestyle_{{item.type }}.png'></image>
+        <image class='icon'></image>
         <view class='right'>
           <view class='key'>{{lifestyles[item.type]}} {{item.brf}}</view>
           <view class='value'>{{item.txt}}</view>
@@ -140,5 +139,9 @@
       </view>
     </view>
     <view class="footer">尼古拉斯·彬彬</view>
+  </view>
+  <view class='openSettingButton' wx:if='{{openSettingButtonShow}}'>
+    <image src='/img/unlock.png'></image>
+    <button open-type='openSetting'></button>
   </view>
 </view>

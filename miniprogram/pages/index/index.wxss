@@ -54,6 +54,48 @@ page {
   padding-left: 50rpx;
   color: #fff;
 }
+.chooseBcg {
+  position: relative;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 24rpx;
+}
+
+.chooseBcg .title {
+  font-size: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.imgs {
+  display: flex;
+  align-items: center;
+  padding: 10rpx;
+  overflow: scroll;
+}
+
+.img-item {
+  margin: 0 14rpx;
+}
+
+.img-item.active {
+  border: 1rpx solid burlywood;
+}
+
+.img-item image {
+  width: 110rpx;
+}
+
+.chooseBcg .down-arrow {
+  text-align: center;
+  margin-top: 20rpx;
+}
+
+.down-arrow image {
+  width: 64rpx;
+  height: 64rpx;
+}
 
 .content {
   position: relative;

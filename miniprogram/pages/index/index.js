@@ -17,7 +17,10 @@ Page({
     weatherIconUrl: weatherIconUrl,
     bcgImgList: bcgImgList,
     bcgImgAreaShow: false,
-    activeIndex: 0
+    activeIndex: 0,
+    detailsDic: detailsDic,
+    enableSearch: false,
+    showHeartbeat: true
   },
   onLoad: function(options) {
     //Do some initialize when page load.
@@ -45,9 +48,42 @@ Page({
     let cityDatas = wx.getStorage({
       key: 'cityDatas',
       success: res => {
-        this.setData();
+        this.setData({
+          cityDatas: res.data
+        });
       }
     });
+  },
+  fnConfirmSearch(e) {
+    let location = e.detail.value.trim();
+    if (location === '520' || location === '521') {
+      this.setData({
+        city: ''
+      });
+      this.dance(() => {
+        this.setData({
+          showHeartbeat: false,
+          enableSearch: true
+        });
+        this.setData({
+          showHeartbeat: true
+        });
+      });
+      return;
+    }
+    wx.pageScrollTo({
+      scrollTop: 0,
+      duration: 300
+    });
+    this.getWeather(location);
+    this.getHourly(location);
+  },
+  dance() {
+    this.setData({
+      enableSearch: false
+    });
+    let heartbeat = this.selectComponent('#heartbeat');
+    heartbeat.dance();
   },
   reloadPage() {
     this.setBcgImg();
@@ -120,12 +156,15 @@ Page({
         if (res.statusCode === 200) {
           let data = res.data.HeWeather6[0];
           if (data.status === 'ok') {
+            data.updateTimeFormat = wx.moment().format('MM-DD HH:mm');
             this.setData({
-              city: ''
+              city: '',
+              cityDatas: data
             });
-            let now = new Date();
-            debugger;
-            data.updateTime = wx.moment().format('MM-DD HH:mm');
+            wx.setStorage({
+              key: 'cityDatas',
+              data: data
+            });
           }
         } else {
           wx.showToast({
@@ -138,7 +177,31 @@ Page({
       fail: err => {}
     });
   },
-  getHourly() {},
+  getHourly(location) {
+    wx.request({
+      url: `${globalData.requestUrl.hourly}`,
+      data: {
+        location,
+        key
+      },
+      success: res => {
+        if (res.statusCode === 200) {
+          let data = res.data.HeWeather6[0];
+          if (data.status === 'ok') {
+            this.setData({
+              hourlyDatas: data.hourly || []
+            });
+          }
+        }
+      },
+      fail: () => {
+        wx.showToast({
+          title: '查询失败',
+          icon: 'none'
+        });
+      }
+    });
+  },
   reloadGetBroadcast() {},
   fnShowImgArea() {
     this.setData({

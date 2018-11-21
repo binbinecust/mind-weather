@@ -7,7 +7,7 @@
   <view class="search" wx:if="{{!bcgImgAreaShow}}">
     <view class="search-wrapper">
       <image src="../../img/search.png" />
-      <input value="{{city}}" class="search-input" placeholder="请输入城市，快速查询天气" placeholder-style="color: #fff" />
+      <input value="{{city}}" class="search-input" placeholder="请输入城市，快速查询天气" placeholder-style="color: #fff" bindconfirm="fnConfirmSearch" disabled="{{enableSearch}}" />
     </view>
   </view>
   <view class="chooseBcg" wx:if="{{bcgImgAreaShow}}">
@@ -41,7 +41,7 @@
       <view class="message">{{message}}</view>
       <view class="temp temp-num">
         {{ cityDatas.now.tmp || '-' }}
-        <text style="position:relative; top: -20rpx;font-size:50rpx;">℃</text>
+        <text style="position:relative; top: -50rpx;font-size:50rpx;">℃</text>
       </view>
       <view class="weather">{{cityDatas.now.cond_txt || '--'}}</view>
       <view class="opacity">
@@ -131,7 +131,7 @@
     </view>
     <view class='livingIndex' wx:if='{{!setting.hiddenIndex}}'>
       <view class='item' wx:for='{{cityDatas.lifestyle || [1,2,4,5,6]}}' wx:key='{{index}}'>
-        <image class='icon'></image>
+        <image class='icon' src='/img/lifestyle_{{item.type}}.png'></image>
         <view class='right'>
           <view class='key'>{{lifestyles[item.type]}} {{item.brf}}</view>
           <view class='value'>{{item.txt}}</view>
@@ -139,9 +139,6 @@
       </view>
     </view>
     <view class="footer">尼古拉斯·彬彬</view>
-  </view>
-  <view class='openSettingButton' wx:if='{{openSettingButtonShow}}'>
-    <image src='/img/unlock.png'></image>
-    <button open-type='openSetting'></button>
+    <ad unit-id="adunit-da632c715ebfb1a5"></ad>
   </view>
 </view>

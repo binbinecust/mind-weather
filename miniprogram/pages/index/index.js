@@ -60,15 +60,7 @@ Page({
       this.setData({
         city: ''
       });
-      this.dance(() => {
-        this.setData({
-          showHeartbeat: false,
-          enableSearch: true
-        });
-        this.setData({
-          showHeartbeat: true
-        });
-      });
+      this.dance();
       return;
     }
     wx.pageScrollTo({
@@ -80,10 +72,18 @@ Page({
   },
   dance() {
     this.setData({
-      enableSearch: false
+      enableSearch: true
     });
     let heartbeat = this.selectComponent('#heartbeat');
-    heartbeat.dance();
+    heartbeat.dance(() => {
+      this.setData({
+        showHeartbeat: false,
+        enableSearch: false
+      });
+      this.setData({
+        showHeartbeat: true
+      });
+    });
   },
   reloadPage() {
     this.setBcgImg();

@@ -65,6 +65,11 @@ Component({
         // );
         clearTimeout(timer);
       }, 200);
+
+      let end = setTimeout(() => {
+        callback && callback();
+        clearTimeout(end);
+      }, 4000);
     }
   },
   created: function() {},

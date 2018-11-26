@@ -29,7 +29,7 @@
     </view>
     <view class="info">
       <view class="city">
-        <view class="city-name">
+        <view class="city-name" bindtap="fnToCitychoosePage">
           <image src="../../img/location_s_w.png" class="downArrow" />
           <text class="location">{{cityDatas.basic.location || '定位中'}}</text>
           <image class='downArrow' src='../../img/down.png'></image>
@@ -140,5 +140,14 @@
     </view>
     <view class="footer">尼古拉斯·彬彬</view>
     <ad unit-id="adunit-da632c715ebfb1a5"></ad>
+  </view>
+  <!-- 悬浮菜单 -->
+  <view class='menus' wx:if='{{!bcgImgAreaShow}}'>
+    <image src="/img/share_circle.png" animation="{{animationOne}}" class="menu"></image>
+    <button plain='true' open-type='share' animation="{{animationOne}}" class='menu share'></button>
+    <image src="/img/setting.png" animation="{{animationTwo}}" class="menu" catchtap="menuToSetting"></image>
+    <image src="/img/location.png" animation="{{animationThree}}" class="menu" catchtap="menuToCitychoose"></image>
+    <image src="/img/info.png" animation="{{animationFour}}" class="menu" catchtap="menuToAbout"></image>
+    <image src="/img/menu.png" animation="{{animationMain}}" class="menu main" catchtap="menuMain"></image>
   </view>
 </view>
